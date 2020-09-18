@@ -47,4 +47,11 @@ steps.value.step_label      steps.value.avg_time▼
 7. Session Start
 
 
+## Distinct funnel_id and COUNT(funnel_id) ##
+
+SELECT DISTINCT(funnel_id), COUNT(funnel_id)
+FROM `jobsbot-276604.jobsbot_mixpanel.mixpanel_funnels` 
+GROUP BY funnel_id
+LIMIT 1000
+
 
