@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 library(jsonlite)
 library(tidyverse)
 library(reactable)
@@ -91,4 +91,6 @@ df2 %>%
         X_sdc_batched_at = as.Date(X_sdc_batched_at)
     ) %>%
     summary()
+
+
 ```

@@ -90,6 +90,13 @@ starting_amount %>%
 
 class(df4[[1]][[1]]$value)
 
-df4[[1]][[1]]$value
+# going into each event (funnel) and selecting most important columns
+df4[[1]][[107]]$value %>%
+    select(step_label, count, avg_time, step_conv_ratio__fl) %>%
+    view()
+
+
+
+
 
 
