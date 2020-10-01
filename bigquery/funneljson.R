@@ -38,18 +38,49 @@ df3 <- data.frame(matrix(unlist(funnel), nrow = 321, byrow = TRUE), stringsAsFac
 #df4 <- ldply(funnel, data.frame)
 
 # sapply ----
+
 # Approach 4: sapply // BEST ANSWER BY FAR
 # makes the MOST sense for nested
 # requires another step, but the first 10-columns are CORRECT
+# column names are correct
 
 df4 <- data.frame(t(sapply(funnel,c)))
 
+# dataframe (each column is a list)
+class(df4)
+
+# list of characters
+class(df4$steps)
+class(df4$starting_amount)
+class(df4$X_sdc_table_version)
 
 
+# Exploratory (df4) ----
 
+str(df4$starting_amount)
+str(df4$X_sdc_table_version)
+str(df4$X_sdc_received_at)
 
+# Cannot explore invalid 'type' (list) of argumment
+df4 %>% 
+    summarize(
+        max_starting = max(starting_amount)
+    )
 
+# Converting each list within a dataframe to a normal column
+# unlist each column, wrap around as.tibble()
 
+starting_amount <- as.tibble(unlist(df4$starting_amount))
 
+starting_amount %>%
+    mutate(value = as.numeric(value)) %>%
+    summarize(
+        min_starting = min(value),
+        max_starting = max(value)
+    )
+
+class(df4[[1]][[1]]$value)
+
+df4[[1]][[1]]$value$step_label
 
 
