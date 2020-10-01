@@ -1,0 +1,94 @@
+---
+title: "mixpanel_funnel"
+author: "Paul Apivat Hanvongse"
+date: "10/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Libraries and Data
+
+
+
+```{r, echo=FALSE}
+library(jsonlite)
+library(tidyverse)
+library(reactable)
+
+# original data: Large List (321 elements, 2.4 Mb); 
+# nested list
+funnel <- lapply(readLines("bq-mixpanel-funnel.json"), fromJSON)
+class(funnel)
+glimpse(funnel)
+
+```
+
+## Use sapply() function to Unnest List 
+
+
+```{r, echo=FALSE}
+
+df <- data.frame(t(sapply(funnel,c)))
+
+# df is a dataframe
+class(df)
+
+# 321 rows, 10 columns - column names correct
+glimpse(df)
+
+# each column is a list
+head(df)
+
+# get each column name
+names(df)
+```
+
+## Unpack each column to get Level 1 Data
+
+Unlist each column, wrap in as.tibble, then re-combine together into data.frame.
+Ignore first column "steps" 
+
+```{r}
+
+# unlist each column
+starting_amount <- as.tibble(unlist(df$starting_amount))
+X_sdc_table_version <- as.tibble(unlist(df$X_sdc_table_version))
+X_sdc_received_at <- as.tibble(unlist(df$X_sdc_received_at))
+X_sdc_sequence <- as.tibble(unlist(df$X_sdc_sequence))
+completion <- as.tibble(unlist(df$completion))
+worst <- as.tibble(unlist(df$worst))
+date <- as.tibble(unlist(df$date))
+funnel_id <- as.tibble(unlist(df$funnel_id))
+X_sdc_batched_at <- as.tibble(unlist(df$X_sdc_batched_at))
+
+# bind columns together into a dataframe
+df2 <- data.frame(starting_amount, X_sdc_table_version, X_sdc_received_at, X_sdc_sequence, completion, worst, date, funnel_id, X_sdc_batched_at)
+name_vector <- c("starting_amount","X_sdc_table_version","X_sdc_received_at","X_sdc_sequence","completion","worst","date","funnel_id","X_sdc_batched_at")
+colnames(df2) <- name_vector
+head(df2)
+
+```
+
+## Normal Data Manipulate on df2 is now possible
+
+```{r}
+head(df2)
+
+# change to numeric or date data types
+df2 %>%
+    mutate(
+        starting_amount = as.numeric(starting_amount),
+        X_sdc_table_version = as.numeric(X_sdc_table_version),
+        X_sdc_received_at = as.Date(X_sdc_received_at),
+        X_sdc_sequence = as.numeric(X_sdc_sequence),
+        completion = as.numeric(completion),
+        worst = as.numeric(worst),
+        date = as.Date(date),
+        funnel_id = as.numeric(funnel_id),
+        X_sdc_batched_at = as.Date(X_sdc_batched_at)
+    ) %>%
+    summary()
+```

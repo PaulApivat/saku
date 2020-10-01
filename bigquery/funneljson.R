@@ -71,6 +71,15 @@ df4 %>%
 # unlist each column, wrap around as.tibble()
 
 starting_amount <- as.tibble(unlist(df4$starting_amount))
+X_sdc_table_version <- as.tibble(unlist(df4$X_sdc_table_version))
+
+data.frame(starting_amount, X_sdc_table_version)
+    
+
+
+steps <- as.tibble(unlist(df4$steps))
+
+steps 
 
 starting_amount %>%
     mutate(value = as.numeric(value)) %>%
@@ -81,6 +90,6 @@ starting_amount %>%
 
 class(df4[[1]][[1]]$value)
 
-df4[[1]][[1]]$value$step_label
+df4[[1]][[1]]$value
 
 
