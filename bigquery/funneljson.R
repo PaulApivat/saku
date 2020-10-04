@@ -90,13 +90,61 @@ starting_amount %>%
 
 class(df4[[1]][[1]]$value)
 
+
+df4[[1]][[107]]$value %>% view()
+
 # going into each event (funnel) and selecting most important columns
 df4[[1]][[107]]$value %>%
     select(step_label, count, avg_time, step_conv_ratio__fl) %>%
     view()
 
 
+for (i in df4[[1]][[i]]$value){
+    print(i)
+}
+
+# First column is a list of dataframe
+list <- df4[[1]]
 
 
+list %>% view()
+
+list[2]
+
+list[[1]]$value$session_event
+
+# for loop and assign function to global environment
+# write out single data frames
+# Might not be necessary, as we want to keep list of datafrmaes
+for (i in seq(list)){
+    assign(paste0("df", i), list[[i]])
+}
+
+list2 <- list
+
+list <- list2
+
+
+for(i in seq_along(list)){
+    for (j in seq_along(colnames(list[[i]]))){
+        if(colnames(list[[i]])[j] != "value.step_label"){
+            colnames(list[[i]])[j] <- paste(colnames(list[[i]])[j], i, sep = ".")
+        }
+    }
+}
+
+# alternative
+for (i in names(list)) {   
+    for (j in seq_along(colnames(list[[i]]))) {     
+        if (colnames(list[[i]])[j] != "value.step_label") {       
+            colnames(datasets[[i]])[j] <- paste(colnames(list[[i]])[j], i, sep = ".")     
+        }   
+    } 
+} 
+
+
+# then reduce (this didn't work)
+
+new_df <- Reduce(function(x, y) merge(x, y, all = TRUE, by = "value.step_label"), list)
 
 
