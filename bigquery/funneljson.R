@@ -44,6 +44,9 @@ df3 <- data.frame(matrix(unlist(funnel), nrow = 321, byrow = TRUE), stringsAsFac
 # requires another step, but the first 10-columns are CORRECT
 # column names are correct
 
+data <- data.frame(t(sapply(funnel,c)))
+class(data)
+
 df4 <- data.frame(t(sapply(funnel,c)))
 
 # dataframe (each column is a list)
@@ -104,7 +107,83 @@ for (i in df4[[1]][[i]]$value){
 }
 
 # First column is a list of dataframe
-list <- df4[[1]]
+
+# turn dataframe (of just first column) back into a list ----
+list <- data[[1]]
+
+data[[1]][[7]]$value$
+
+# loop through list ----
+library(purrr)
+install.packages("magrittr")
+library(magrittr)
+
+# loop function
+for (df in 1:length(list)){
+    list[[df]]
+}
+
+# loop function
+loop_function <- function(x){
+    x %>%
+        select('step_label') -> x
+    
+    return(x)
+}
+
+# Print out individual columns from each dataframe----
+
+for (df in list){
+    #grab first column of each dataframe
+    print(df$value$funnel_id)
+}
+
+for (df in 1:length(list)){
+    print(list[[df]]$value$step_conv_ratio__fl)
+}
+
+
+for (df in 1:length(list)){
+    step_conv <- list[[df]]$value$step_conv_ratio__fl
+}
+
+
+for (df in list){
+    print(df)
+}
+
+
+loop_result_2 <- map(list[[319]], ~loop_function(.))
+
+loop_result_3 <- map(list[[1]]$value, ~loop_function(.))
+
+list[[1]]$value
+
+
+for (j in data$steps){
+    print(j)
+}
+
+
+
+list %>%
+    select("value.step_label")
+
+
+loop_result_2$value
+    
+lapply(list, loop_function)
+
+
+
+for (i in list[[i]]){
+    map(list[[i]]$value, ~loop_function(.))
+}
+    
+data$steps[[2]]
+
+
+list[[3]]
 
 
 list %>% view()
