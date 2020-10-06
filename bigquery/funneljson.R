@@ -106,7 +106,13 @@ unnest_steps <- data %>%
 ## NOTE: unnest_steps is essentially rbind of all 321 dataframes in list
 
 # once unnested, $value turns into regular dataframe
-unnest_steps$value$
+unnest_steps$value
+    
+# Wanted to loop through and select certain columns
+# This is easily done after unnest
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    view()
 
 
 # This works, but
