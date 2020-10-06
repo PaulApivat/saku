@@ -114,6 +114,28 @@ unnest_steps$value %>%
     select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
     view()
 
+# group by step_label
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label) %>%
+    tally(sort = TRUE)
+
+# A tibble: 7 x 2
+step_label           n
+<chr>            <int>
+1 Session Start      321
+2 get job details    214
+3 job lising         214
+4 contact employer   107
+5 go to smartjob     107
+6 Session End        107
+7 share job          107
+
+
+
+
+
+
 
 # This works, but
 # how do I loop through all [[1:321]]
