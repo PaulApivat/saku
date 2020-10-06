@@ -146,7 +146,13 @@ funnel_id     n
 2 9336319     321
 3 9395015     214
 
-
+# group_by step_label AND step_conv_ratio__fl
+# to see average converation ratio per step (and count)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>%
+    view()
 
 
 # This works, but
