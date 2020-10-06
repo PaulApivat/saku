@@ -162,7 +162,16 @@ unnest_steps$value %>%
         avg_step_conv_ratio__fl = mean(step_conv_ratio__fl, na.rm = TRUE)
     )
 
-
+# A tibble: 7 x 2
+step_label       avg_step_conv_ratio__fl
+<chr>                              <dbl>
+1 contact employer                   0.104
+2 get job details                    0.353
+3 go to smartjob                     1    
+4 job lising                         0.663
+5 Session End                        1    
+6 Session Start                    NaN    
+7 share job                          1  
 
 
 
