@@ -132,7 +132,19 @@ step_label           n
 7 share job          107
 
 
+# group_by & talley funnel id
+# 3 unique funnel ids
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(funnel_id) %>%
+    tally(sort = TRUE)
 
+# A tibble: 3 x 2
+funnel_id     n
+<chr>     <int>
+1 9335667     642
+2 9336319     321
+3 9395015     214
 
 
 
