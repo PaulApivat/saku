@@ -8,6 +8,7 @@ sessionInfo()
 library(jsonlite)
 library(tidyverse)
 library(reactable)
+library(magrittr)
 
 # read json file ----
 # funnel <- fromJSON("bq-mixpanel-funnel.json", flatten = TRUE)
@@ -45,7 +46,79 @@ df3 <- data.frame(matrix(unlist(funnel), nrow = 321, byrow = TRUE), stringsAsFac
 # column names are correct
 
 data <- data.frame(t(sapply(funnel,c)))
+# a data frame (where columns are lists)
 class(data)
+# this column is a list of dataframes
+class(data$steps)
+class(data$starting_amount)
+
+# this is a dataframe again
+class(data$steps[[321]]$value)
+
+print(data$steps[[321]])
+
+
+data$steps[[319]]$value %>%
+    split(.$step_conv_ratio__fl) %>% view()
+
+# This works, but
+# how do I loop through all [[1:321]]
+data$steps[[319]] %>%
+    map(sample_function)
+
+unlist(data$steps[c(1:321)])
+
+list[c(1:321)]
+
+list %>%
+    modify_depth(3, '+', 100L) %>%
+    str()
+
+str(list[[319]])
+
+# this worked
+# use modify_at function on a target column within a specific dataframe
+list[[319]]$value %>%
+    modify_at(c(2), as.numeric) %>%
+    str()
+
+
+# a list of dataframes
+list <- data$steps
+class(list)
+
+# for every dataframe in list
+for (df in list){
+    # print out content of first column (character)
+    print(df$value$step_label)
+}
+
+for (df in 1:length(list)){
+    print(list[[df]]$value$step_conv_ratio__fl)
+}
+
+sample_function <- function(x){
+    x %<>%
+        select(1:5)
+    
+    return(x)
+}
+
+new_list <- map(data$steps[[321]], sample_function)
+unlist_new_list <- unlist(new_list)
+
+View(as.data.frame(unlist_new_list))
+
+# final for loop with map function
+for (i in 1:length(list)){
+    new_list <- map(list[[i]]$value, sample_function)
+}
+
+
+class(data$steps[[321]]$value)
+
+
+
 
 df4 <- data.frame(t(sapply(funnel,c)))
 
@@ -93,6 +166,8 @@ starting_amount %>%
 
 class(df4[[1]][[1]]$value)
 
+
+data$
 
 df4[[1]][[107]]$value %>% view()
 
