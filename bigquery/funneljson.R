@@ -9,18 +9,21 @@ library(jsonlite)
 library(tidyverse)
 library(reactable)
 library(magrittr)
+library(purrr)
 
 # read json file ----
 # funnel <- fromJSON("bq-mixpanel-funnel.json", flatten = TRUE)
 
 # read multiple nested json ----
 
-# "list" class
-class(funnel)
-
 # read data out into Large list (321 elements, 2.4 Mb)
 # each row is *another* list
 funnel <- lapply(readLines("bq-mixpanel-funnel.json"), fromJSON)
+
+# "list" class
+class(funnel)
+
+
 
 # Approach 1: convert to matrix, array
 unlist_funnel <- matrix(unlist(funnel), byrow = TRUE, ncol = length(funnel[[1]]))
@@ -40,7 +43,7 @@ df3 <- data.frame(matrix(unlist(funnel), nrow = 321, byrow = TRUE), stringsAsFac
 
 # sapply ----
 
-# Approach 4: sapply // BEST ANSWER BY FAR
+# Approach 4: sapply // BEST ANSWER BY FAR ----
 # makes the MOST sense for nested
 # requires another step, but the first 10-columns are CORRECT
 # column names are correct
@@ -48,18 +51,57 @@ df3 <- data.frame(matrix(unlist(funnel), nrow = 321, byrow = TRUE), stringsAsFac
 data <- data.frame(t(sapply(funnel,c)))
 # a data frame (where columns are lists)
 class(data)
-# this column is a list of dataframes
+
+# We're interested in first column (steps) 
+# which is a list of data frames 
 class(data$steps)
+
+# other columns are also lists
 class(data$starting_amount)
 
-# this is a dataframe again
+
+#this is a dataframe again
 class(data$steps[[321]]$value)
 
 print(data$steps[[321]])
 
-
+# grabbing first row of 319th dataframe inside steps
 data$steps[[319]]$value %>%
     split(.$step_conv_ratio__fl) %>% view()
+
+
+# save list of dataframes (steps) to a variable list
+list <- data$steps
+class(list)
+
+# print all dataframes inside list
+list[c(1:321)]
+
+
+
+# using for-loop to print every dataframe in list
+for (df in list){
+    # print out content of first column (character)
+    print(df$value$step_label)
+}
+
+for (df in 1:length(list)){
+    print(list[[df]]$value$step_conv_ratio__fl)
+}
+
+
+## Unnest data frame with purrr----
+
+# three unique funnel_id
+data %>%
+    unnest(steps) %>%
+    select(funnel_id) %>%
+    summarize(unique_funnel_id = unique(funnel_id)) %>%
+    view()
+
+
+
+
 
 # This works, but
 # how do I loop through all [[1:321]]
@@ -68,7 +110,7 @@ data$steps[[319]] %>%
 
 unlist(data$steps[c(1:321)])
 
-list[c(1:321)]
+
 
 list %>%
     modify_depth(3, '+', 100L) %>%
@@ -83,19 +125,9 @@ list[[319]]$value %>%
     str()
 
 
-# a list of dataframes
-list <- data$steps
-class(list)
 
-# for every dataframe in list
-for (df in list){
-    # print out content of first column (character)
-    print(df$value$step_label)
-}
 
-for (df in 1:length(list)){
-    print(list[[df]]$value$step_conv_ratio__fl)
-}
+
 
 sample_function <- function(x){
     x %<>%
