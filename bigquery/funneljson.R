@@ -99,8 +99,14 @@ data %>%
     summarize(unique_funnel_id = unique(funnel_id)) %>%
     view()
 
+# unnest steps, then save to variable
+unnest_steps <- data %>%
+    unnest(steps)
 
+## NOTE: unnest_steps is essentially rbind of all 321 dataframes in list
 
+# once unnested, $value turns into regular dataframe
+unnest_steps$value$
 
 
 # This works, but
