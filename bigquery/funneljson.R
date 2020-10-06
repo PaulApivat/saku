@@ -153,6 +153,7 @@ unnest_steps$value %>%
     view()
 
 # calculate *average* step_conv_ratio__fl (per each unique step)
+# this is unweighted
 unnest_steps$value %>%
     select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
     group_by(step_label, step_conv_ratio__fl) %>%
@@ -174,6 +175,103 @@ step_label       avg_step_conv_ratio__fl
 7 share job                          1  
 
 
+
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>% view()
+
+
+# Polish Metrics ----
+
+# Percentag of people moving through funnel from Session Start
+# note: not all people go through all steps (some have 3, 6 or 2)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label) %>%
+    tally(sort = TRUE) %>%
+    mutate(
+        percentages = n/321
+    )
+
+
+# Filter for "get job details" (NA = 79%)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>%
+    filter(step_label=='get job details') %>%
+    mutate(
+        sum_n = sum(n),
+        percentages = n/214
+    )
+
+
+# Filter for "job lising" (NA = 78%)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>%
+    filter(step_label=='job lising') %>%
+    mutate(
+        sum_n = sum(n),
+        percentages = n/214
+    )
+
+
+# Filter for 'contact employer' (NA = 61%)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>%
+    filter(step_label=='contact employer') %>%
+    mutate(
+        sum_n = sum(n),
+        percentages = n/107
+    )
+
+
+# Filter for 'go to smartjob' (NA = 94%)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>%
+    filter(step_label=='go to smartjob') %>%
+    mutate(
+        sum_n = sum(n),
+        percentages = n/107
+    )
+
+
+# Filter for 'share job' (NA = 94%)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>%
+    filter(step_label=='share job') %>%
+    mutate(
+        sum_n = sum(n),
+        percentages = n/107
+    )
+
+
+# Filter for 'Session End' (NA = 61%)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>% 
+    arrange(desc(step_label)) %>%
+    filter(step_label=='Session End') %>%
+    mutate(
+        sum_n = sum(n),
+        percentages = n/107
+    )
 
 
 
