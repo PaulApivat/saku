@@ -65,9 +65,7 @@ class(data$steps[[321]]$value)
 
 print(data$steps[[321]])
 
-# grabbing first row of 319th dataframe inside steps
-data$steps[[319]]$value %>%
-    split(.$step_conv_ratio__fl) %>% view()
+
 
 
 # save list of dataframes (steps) to a variable list
@@ -153,6 +151,27 @@ unnest_steps$value %>%
     group_by(step_label, step_conv_ratio__fl) %>%
     tally(sort = TRUE) %>%
     view()
+
+# calculate *average* step_conv_ratio__fl (per each unique step)
+unnest_steps$value %>%
+    select(step_label, date, funnel_id, step_conv_ratio__fl) %>%
+    group_by(step_label, step_conv_ratio__fl) %>%
+    tally(sort = TRUE) %>%
+    group_by(step_label) %>%
+    summarize(
+        avg_step_conv_ratio__fl = mean(step_conv_ratio__fl, na.rm = TRUE)
+    )
+
+
+
+
+
+
+
+
+# grabbing first row of 319th dataframe inside steps
+data$steps[[319]]$value %>%
+    split(.$step_conv_ratio__fl) %>% view()
 
 
 # This works, but
