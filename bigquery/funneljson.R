@@ -276,6 +276,7 @@ unnest_steps$value %>%
 
 
 
+
 # grabbing first row of 319th dataframe inside steps
 data$steps[[319]]$value %>%
     split(.$step_conv_ratio__fl) %>% view()
