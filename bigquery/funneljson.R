@@ -52,6 +52,22 @@ data <- data.frame(t(sapply(funnel,c)))
 # a data frame (where columns are lists)
 class(data)
 
+# breaking down approach that worked
+# c function is used to create a vector?
+sapply(funnel,c) %>% view()
+t(sapply(funnel,c))
+data.frame(t(sapply(funnel,c))) %>% view()
+
+# comes down to unlist(), lapply() vs sapply()
+unlist(funnel) %>% view()
+lapply(funnel,c) %>% view() #not working
+unlist(lapply(funnel, c)) %>% view() #works but everything is on one column
+t(sapply(funnel, c)) %>% view()   #still the ideal, this works because 'c' is used ot combine lists
+
+lapply(funnel, c) %>% view()
+lapply(funnel, tolower) %>% view()
+t(lapply(funnel, c)) %>% view()   # this makes everything a list, but we want everything into a vector
+
 # We're interested in first column (steps) 
 # which is a list of data frames 
 class(data$steps)
