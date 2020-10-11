@@ -28,7 +28,7 @@ class(funnel)
 # Approach 1: convert to matrix, array
 unlist_funnel <- matrix(unlist(funnel), byrow = TRUE, ncol = length(funnel[[1]]))
 rownames(unlist_funnel) <- names(funnel)
-as.data.frame(unlist_funnel)
+as.data.frame(unlist_funnel) %>% view()
 
 
 # Approach 2: Convert list to data frame
@@ -66,7 +66,7 @@ t(sapply(funnel, c)) %>% view()   #still the ideal, this works because 'c' is us
 
 lapply(funnel, c) %>% view()
 lapply(funnel, tolower) %>% view()
-t(lapply(funnel, c)) %>% view()   # this makes everything a list, but we want everything into a vector
+  
 
 # We're interested in first column (steps) 
 # which is a list of data frames 
