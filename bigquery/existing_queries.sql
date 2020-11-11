@@ -51,3 +51,25 @@ FROM `jobsbot-276604.sakudemo.export`
 GROUP BY event
 ORDER BY num DESC
 LIMIT 10
+
+
+# source: sakudemo > export
+# table name: id_count
+# data studio: Existing Queries BQ
+
+SELECT distinct_id, COUNT(distinct_id) AS num
+FROM `jobsbot-276604.sakudemo.export` 
+GROUP BY distinct_id
+ORDER BY num DESC
+LIMIT 200
+
+# source: jobsbot_mixpanel > mixpanel_export
+# table name: event_count
+# data studio: Existing Queries BQ
+
+
+SELECT event, COUNT(event) as num
+FROM `jobsbot-276604.jobsbot_mixpanel.mixpanel_export` 
+GROUP BY event
+ORDER BY num DESC
+LIMIT 1000
