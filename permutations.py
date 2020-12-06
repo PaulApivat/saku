@@ -6,6 +6,7 @@ list1 = ['get started', 'user input', 'show jobposts',
 
 
 def permutations(iterable, r=None):
+    """Find all possible order of a list of elements"""
     # permutations('ABCD',2)--> AB AC AD BA BC BD CA CB CD DA DB DC
     # permutations(range(3))--> 012 021 102 120 201 210
     pool = tuple(iterable)
@@ -37,6 +38,6 @@ perm = permutations(list1, 6)
 count = 0
 
 for p in perm:
-    count = count + 1
+    count += 1
     print(p)
 print("there are:", count, "permutations.")
